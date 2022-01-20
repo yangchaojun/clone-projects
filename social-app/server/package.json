@@ -1,0 +1,16 @@
+{
+	"name": "social-app-api",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"start": "nodemon index.js"
+	},
+	"dependencies": {
+		"bcrypt": "^5.0.1",
+		"express": "^4.17.2",
+		"helmet": "^5.0.1",
+		"mongoose": "^6.1.6",
+		"morgan": "^1.10.0",
+		"nodemon": "^2.0.15"
+	}
+}
