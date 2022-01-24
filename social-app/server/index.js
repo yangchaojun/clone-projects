@@ -6,6 +6,8 @@ const userRoute = require('./routes/users')
 const postRoute = require('./routes/posts')
 const helmet = require('helmet')
 const morgan = require('morgan')
+const multer = require('multer')
+const path = require('path')
 
 main()
   .then(() => console.log('连接成功'))
@@ -18,6 +20,8 @@ async function main() {
   })
 }
 
+app.use('/images', express.static(path.join(__dirname, 'public/images')))
+
 // middleware
 app.use(express.json())
 app.use(helmet())
@@ -29,8 +33,22 @@ app.use('/api/auth', authRoute)
 app.use('/api/user', userRoute)
 app.use('/api/post', postRoute)
 
-app.use('/', (req, res) => {
-  res.end('<h1>hello world</h1>')
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/images')
+  },
+  filename: (req, file, cb) => {
+    cb(null, req.body.name)
+  }
+})
+
+const upload = multer({ storage: storage })
+app.post('/api/upload', upload.single('file'), (req, res) => {
+  try {
+    return res.status(200).json('File upload successfully')
+  } catch (err) {
+    console.error(err)
+  }
 })
 
 app.listen(8080, () => {
